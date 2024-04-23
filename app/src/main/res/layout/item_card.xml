@@ -36,10 +36,11 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/mcvProductImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="12dp"
-                    app:strokeColor="@color/primary_color"
+                    app:strokeColor="@color/bg_primary_subtle"
                     app:strokeWidth="1dp">
 
                     <ImageView
@@ -112,7 +113,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/btn_card_add" />
+                        android:src="@drawable/ic_item_add" />
 
                     <TextView
                         android:id="@+id/tvItemCount"
@@ -130,7 +131,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/btn_card_add"
+                        android:src="@drawable/ic_item_delete"
                         android:visibility="gone" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

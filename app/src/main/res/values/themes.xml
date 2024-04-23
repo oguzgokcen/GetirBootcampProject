@@ -6,6 +6,7 @@
         <item name="fontFamily">@font/open_sans</item>
         <item name="colorPrimary">@color/primary_color</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
+        <item name="android:colorBackground">@color/bg_primary_subtle</item>
     </style>
 
     <style name="Theme.GetirBootcampProject" parent="Base.Theme.GetirBootcampProject" />

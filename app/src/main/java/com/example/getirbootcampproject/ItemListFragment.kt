@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.getirbootcampproject.databinding.FragmentItemListBinding
@@ -49,13 +51,35 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                 imageURL = "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png",
                 price = 43.9,
                 priceText = "₺43,90"
+            ),
+            CardItem(
+                id = "5d6d2c696deb8b00011f7665",
+                name = "Kuzeyden",
+                attribute = "2 x 5 L",
+                thumbnailURL = "http://cdn.getir.com/product/5d6d2c696deb8b00011f7665_tr_1617795578982.jpeg",
+                imageURL = "http://cdn.getir.com/product/5d6d2c696deb8b00011f7665_tr_1617795578982.jpeg",
+                price = 59.2,
+                priceText = "₺59,20"
+            ),
+            CardItem(
+                id = "645a08cc4d357e68122d74b1",
+                name = "Sırma Lemon & Sırma Black Mulberry & Blackcurrant Mineral Water",
+                attribute = "2 Products",
+                thumbnailURL = "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png",
+                imageURL = "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png",
+                price = 43.9,
+                priceText = "₺43,90"
             )
+
         )
 
         itemAdapter.data = cardItems
-        binding.rvItemList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvItemList.adapter = itemAdapter
+        binding.rvItemListHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvItemListHorizontal.adapter = itemAdapter
         initListener()
+
+        binding.rvItemListGrid.layoutManager = GridLayoutManager(context, 3)
+        binding.rvItemListGrid.adapter = itemAdapter
     }
 
     private fun initListener() {
@@ -66,7 +90,7 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
         { inflater, _, _ ->
             ItemCardBinding.inflate(
                 inflater,
-                binding.rvItemList,
+                binding.rvItemListHorizontal,
                 false
             )
         },
@@ -91,14 +115,23 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                     val currentValue = tvItemCount.text.toString().toInt()
                     val newValue = currentValue + 1
                     tvItemCount.text = newValue.toString()
+                    if (newValue > 1){
+                        ivRemoveFromCard.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_item_decrease, null))
+                    }
+                    mcvProductImage.strokeColor = ResourcesCompat.getColor(resources, R.color.primary_color, null)
                 }
                 ivRemoveFromCard.setOnClickListener{
                     Log.v("ItemListFragment", "Remove from cart clicked")
+
                     if(tvItemCount.text.toString().toInt() > 0)
-                        tvItemCount.text = (tvItemCount.text.toString().toInt() - 1).toString()
+                        tvItemCount.text = (tvItemCount.text.toString().toInt()-1).toString()
+                    if (tvItemCount.text.toString().toInt() ==1){
+                        ivRemoveFromCard.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_item_delete, null))
+                    }
                     if (tvItemCount.text.toString().toInt() == 0){
                         tvItemCount.visibility = View.GONE
                         ivRemoveFromCard.visibility = View.GONE
+                        mcvProductImage.strokeColor = ResourcesCompat.getColor(resources, R.color.bg_primary_subtle, null)
                     }
                 }
             }
