@@ -7,11 +7,11 @@
 
     <font
         android:fontStyle="normal"
-        android:fontWeight="700"
+        android:fontWeight="600"
         android:font="@font/open_sans_semibold" />
 
     <font
         android:fontStyle="normal"
-        android:fontWeight="900"
+        android:fontWeight="700"
         android:font="@font/open_sans_bold" />
 </font-family>
