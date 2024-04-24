@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
+    android:id="@+id/llDetailFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailFragment" >
+    android:background="@color/md_theme_light_onPrimary"
+    android:elevation="1dp"
+    android:orientation="vertical"
+    tools:context=".presentation.item.DetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/navLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/primary_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_alignParentStart="true">
 
         <TextView
             android:id="@+id/tv_nav"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             android:fontFamily="@font/open_sans_bold"
             android:text="Ürünler"
             android:textColor="@color/md_theme_light_onPrimary"
+            android:textFontWeight="700"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +52,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="2">
 
                     <ImageView
                         android:id="@+id/imageView"
@@ -74,8 +79,10 @@
                         android:id="@+id/tv_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_bold"
                         android:text="₺0,00"
                         android:textColor="@color/primary_text_color"
+                        android:textFontWeight="700"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -85,4 +92,93 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_theme_light_onPrimary"
+        android:layout_below="@id/navLayout"
+        android:elevation="3dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/basket_item" />
+
+        <TextView
+            android:id="@+id/tv_detail_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="₺0,00"
+            android:textColor="@color/primary_text_color"
+            android:textFontWeight="700"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tv_detail_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Product Name"
+            android:textColor="@color/text_dark"
+            android:textFontWeight="600"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_detail_attribute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:text="Attribute"
+            android:textColor="@color/text_secondary"
+            android:textFontWeight="600"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_detail"
+        android:layout_above="@id/button"
+        android:layout_marginBottom="16dp"
+        android:background="@color/md_theme_light_onPrimary"
+        android:elevation="3dp"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp"
+        android:height="50dp"
+        app:cornerRadius="10dp"
+        android:text="Sepete Ekle"
+        app:backgroundTint="@color/bg_primary"
+        android:textColor="@color/text_light"
+        android:fontFamily="@font/open_sans_bold"
+        android:textFontWeight="700"
+        android:textSize="14sp"
+        android:textAlignment="center"/>
+
+
+</RelativeLayout>

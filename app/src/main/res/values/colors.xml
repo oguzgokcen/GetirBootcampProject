@@ -5,6 +5,9 @@
     <color name="primary_color">#5D3EBC</color>
     <color name="primary_text_color">#5D3EBC</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="bg_primary">#5D3EBC</color>
     <color name="bg_primary_subtle">#F2F0FA</color>
     <color name="text_secondary">#697488</color>
+    <color name="text_dark">#191919</color>
+    <color name="text_light">#FFFFFF</color>
 </resources>

@@ -1,8 +1,6 @@
 package com.example.getirbootcampproject.domain.model
 
-import retrofit2.http.Url
-
-data class CardItem(
+data class Product(
     val id: String,
     val name: String,
     val attribute: String,
