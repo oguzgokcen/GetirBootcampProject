@@ -1,4 +1,4 @@
-package com.example.getirbootcampproject.data.remote
+package com.example.getirbootcampproject.helper
 
 import android.util.Log
 import com.example.getirbootcampproject.domain.model.remote.RespData

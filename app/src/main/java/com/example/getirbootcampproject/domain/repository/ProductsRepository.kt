@@ -5,7 +5,6 @@ import com.example.getirbootcampproject.data.remote.CallBack
 import com.example.getirbootcampproject.di.IoDispatcher
 import com.example.getirbootcampproject.domain.model.BaseResponse
 import com.example.getirbootcampproject.domain.model.Product
-import com.example.getirbootcampproject.domain.model.ProductSuggestionsResponse
 import com.example.getirbootcampproject.domain.model.remote.RespData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
@@ -23,7 +22,7 @@ class ProductsRepository @Inject constructor(
         awaitClose{close()}
     }.flowOn(ioDispatcher)
 
-    fun getSuggestedProducts(): Flow<BaseResponse<RespData<ProductSuggestionsResponse>>> = callbackFlow{
+    fun getSuggestedProducts(): Flow<BaseResponse<RespData<Product>>> = callbackFlow{
         apiService.getSuggestedProducts().enqueue(CallBack(this.channel))
         awaitClose{close()}
     }.flowOn(ioDispatcher)

@@ -18,5 +18,9 @@
         android:id="@+id/detailFragment"
         android:name="com.example.getirbootcampproject.presentation.item.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="item"
+            app:argType="com.example.getirbootcampproject.domain.model.Product" />
+    </fragment>
 </navigation>

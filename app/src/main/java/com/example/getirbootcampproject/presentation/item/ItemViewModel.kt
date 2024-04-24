@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.getirbootcampproject.domain.ViewState
 import com.example.getirbootcampproject.domain.model.BaseResponse
 import com.example.getirbootcampproject.domain.model.Product
-import com.example.getirbootcampproject.domain.model.ProductSuggestionsResponse
 import com.example.getirbootcampproject.domain.model.remote.RespData
 import com.example.getirbootcampproject.domain.usecase.ProductsUseCase
 import com.example.getirbootcampproject.domain.usecase.SuggestedProductsUseCase
@@ -27,10 +26,18 @@ class ItemViewModel @Inject constructor(
         MutableStateFlow(ViewState.Loading)
     val uiStateItemList = _uiStateItemList.asStateFlow()
 
-    private val _uiStateSuggestions: MutableStateFlow<ViewState<BaseResponse<RespData<ProductSuggestionsResponse>>>> =
+    private val _uiStateSuggestions: MutableStateFlow<ViewState<BaseResponse<RespData<Product>>>> =
         MutableStateFlow(ViewState.Loading)
     val uiStateSuggestions = _uiStateSuggestions.asStateFlow()
 
+    var cardTotal = 0.0
+
+    fun addToCard(price: Double) {
+        cardTotal += price
+    }
+    fun getCardTotal(): String {
+        return "₺"+String.format("%.2f", cardTotal)
+    }
     fun getProducts() {
         productsUseCase.execute().map {
             when(val responseData: BaseResponse<RespData<Product>> = it) {
@@ -51,7 +58,7 @@ class ItemViewModel @Inject constructor(
 
     fun getSuggestedProducts() {
         suggestedProductsUseCase.execute().map {
-            when(val responseData: BaseResponse<RespData<ProductSuggestionsResponse>> = it) {
+            when(val responseData: BaseResponse<RespData<Product>> = it) {
                 is BaseResponse.Success -> {
                     ViewState.Success(responseData)
                 }

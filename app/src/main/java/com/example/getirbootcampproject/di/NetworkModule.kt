@@ -2,7 +2,7 @@ package com.example.getirbootcampproject.di
 
 import com.example.getirbootcampproject.BuildConfig
 import com.example.getirbootcampproject.data.remote.ApiService
-import com.example.getirbootcampproject.data.remote.ProductDeserializer
+import com.example.getirbootcampproject.helper.ProductDeserializer
 import com.example.getirbootcampproject.domain.model.remote.RespData
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

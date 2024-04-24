@@ -1,14 +1,18 @@
 package com.example.getirbootcampproject.presentation.item
 
 import android.animation.LayoutTransition
+import android.content.ClipData.Item
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -18,7 +22,6 @@ import com.example.getirbootcampproject.databinding.ItemCardBinding
 import com.example.getirbootcampproject.domain.ViewState
 import com.example.getirbootcampproject.domain.model.BaseResponse
 import com.example.getirbootcampproject.domain.model.Product
-import com.example.getirbootcampproject.domain.model.ProductSuggestionsResponse
 import com.example.getirbootcampproject.presentation.adapter.SingleRecylerAdapter
 import com.wada811.viewbindingktx.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,62 +35,7 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.v("ItemListFragment", "onViewCreated")
-        val products = listOf(
-            Product(
-                id = "66055119e6d3728ea0a686a0",
-                name = "Kızılay Erzincan & Misket Limonu ve Nane Aromalı İçecek İkilisi",
-                attribute = "2 Products",
-                thumbnailURL = "https://market-product-images-cdn.getirapi.com/product/62a59d8a-4dc4-4b4d-8435-643b1167f636.jpg",
-                imageURL = "https://market-product-images-cdn.getirapi.com/product/62a59d8a-4dc4-4b4d-8435-643b1167f636.jpg",
-                price = 65.3,
-                priceText = "₺65,30"
-            ),
-            Product(
-                id = "5d6d2c696deb8b00011f7665",
-                name = "Kuzeyden",
-                attribute = "2 x 5 L",
-                thumbnailURL = "http://cdn.getir.com/product/5d6d2c696deb8b00011f7665_tr_1617795578982.jpeg",
-                imageURL = "http://cdn.getir.com/product/5d6d2c696deb8b00011f7665_tr_1617795578982.jpeg",
-                price = 59.2,
-                priceText = "₺59,20"
-            ),
-            Product(
-                id = "645a08cc4d357e68122d74b1",
-                name = "Sırma Lemon & Sırma Black Mulberry & Blackcurrant Mineral Water",
-                attribute = "2 Products",
-                thumbnailURL = "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png",
-                imageURL = "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png",
-                price = 43.9,
-                priceText = "₺43,90"
-            ),
-            Product(
-                id = "5d6d2c696deb8b00011f7665",
-                name = "Kuzeyden",
-                attribute = "2 x 5 L",
-                thumbnailURL = "http://cdn.getir.com/product/5d6d2c696deb8b00011f7665_tr_1617795578982.jpeg",
-                imageURL = "http://cdn.getir.com/product/5d6d2c696deb8b00011f7665_tr_1617795578982.jpeg",
-                price = 59.2,
-                priceText = "₺59,20"
-            ),
-            Product(
-                id = "645a08cc4d357e68122d74b1",
-                name = "Sırma Lemon & Sırma Black Mulberry & Blackcurrant Mineral Water",
-                attribute = "2 Products",
-                thumbnailURL = "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png",
-                imageURL = "https://market-product-images-cdn.getirapi.com/product/ff43e9c8-a6a0-4444-923b-4972b2915284.png",
-                price = 43.9,
-                priceText = "₺43,90"
-            )
 
-        )
-
-//        itemAdapter.data = products
-//        binding.rvItemListHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//        binding.rvItemListHorizontal.adapter = itemAdapter
-//        initListener()
-//
-//        binding.rvItemListGrid.layoutManager = GridLayoutManager(context, 3)
-//        binding.rvItemListGrid.adapter = itemAdapter
         viewModel.getSuggestedProducts()
         viewModel.getProducts()
         initObserver()
@@ -106,7 +54,6 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                             val response = viewState.result as BaseResponse.Success
                             //binding.loadingView.visibility = View.GONE
                             itemAdapter.data = response.data.products
-
                             binding.rvItemListGrid.layoutManager = GridLayoutManager(context, 3)
                             binding.rvItemListGrid.adapter = itemAdapter
                             Log.v("ViewState.Success", response.data.toString())
@@ -130,9 +77,9 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                         is ViewState.Success -> {
                             val response = viewState.result as BaseResponse.Success
                             //binding.loadingView.visibility = View.GONE
-                            itemAdapterSuggestions.data = response.data.products
+                            itemSuggestedAdapter.data = response.data.products
                             binding.rvItemListHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                            binding.rvItemListHorizontal.adapter = itemAdapterSuggestions
+                            binding.rvItemListHorizontal.adapter = itemSuggestedAdapter
                             Log.v("ViewState.Success", response.data.toString())
                         }
 
@@ -153,12 +100,12 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
         { inflater, _, _ ->
             ItemCardBinding.inflate(
                 inflater,
-                binding.rvItemListHorizontal,
+                binding.rvItemListGrid,
                 false
             )
         },
-        { binding, item ->
-            with(binding) {
+        { cardItemBinding, item ->
+            with(cardItemBinding) {
                 context?.let {
                     Glide.with(it)
                         .load(item.thumbnailURL)  //başlık resmini kullanıyoruz
@@ -187,7 +134,6 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                 }
                 ivRemoveFromCard.setOnClickListener{
                     Log.v("ItemListFragment", "Remove from cart clicked")
-
                     if(tvItemCount.text.toString().toInt() > 0)
                         tvItemCount.text = (tvItemCount.text.toString().toInt()-1).toString()
                     if (tvItemCount.text.toString().toInt() ==1){
@@ -201,10 +147,14 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                             R.color.bg_primary_subtle, null)
                     }
                 }
+                cardLayout.setOnClickListener{
+                    val direction = ItemListFragmentDirections.actionItemListFragmentToDetailFragment(item)
+                    findNavController().navigate(direction)
+                }
             }
         }
     )
-    private val itemAdapterSuggestions = SingleRecylerAdapter<ItemCardBinding, ProductSuggestionsResponse>(
+    private val itemSuggestedAdapter = SingleRecylerAdapter<ItemCardBinding, Product>(  //for suggested items linear layout and item.ImageURL instead of item.thumbnailURL
         { inflater, _, _ ->
             ItemCardBinding.inflate(
                 inflater,
@@ -212,16 +162,16 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                 false
             )
         },
-        { binding, item ->
-            with(binding) {
+        { cardItemBinding, item ->
+            with(cardItemBinding) {
                 context?.let {
                     Glide.with(it)
-                        .load(item.imageURL)  //başlık resmini kullanıyoruz
+                        .load(item.imageURL)
                         .into(ivProductImage)
                 }
                 tvProductName.text = item.name
                 tvProductPrice.text = item.priceText
-                tvProductAttribute.text = item.shortDescription
+                tvProductAttribute.text = item.attribute
                 lladdToCart.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
                 ivAddToCart.setOnClickListener{
                     Log.v("ItemListFragment", "Add to cart clicked")
@@ -242,7 +192,6 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                 }
                 ivRemoveFromCard.setOnClickListener{
                     Log.v("ItemListFragment", "Remove from cart clicked")
-
                     if(tvItemCount.text.toString().toInt() > 0)
                         tvItemCount.text = (tvItemCount.text.toString().toInt()-1).toString()
                     if (tvItemCount.text.toString().toInt() ==1){
@@ -255,6 +204,10 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                         mcvProductImage.strokeColor = ResourcesCompat.getColor(resources,
                             R.color.bg_primary_subtle, null)
                     }
+                }
+                cardLayout.setOnClickListener{
+                    val direction = ItemListFragmentDirections.actionItemListFragmentToDetailFragment(item)
+                    findNavController().navigate(direction)
                 }
             }
         }
