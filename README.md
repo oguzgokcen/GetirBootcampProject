@@ -1,3 +1,4 @@
+(Project is on master branch)
 # GetirBootcampProject
 Welcome to my Getir Bootcamp Project. I tried to copy existing design and functionality of Getir which is known for its wide range of products and fast delivery service in the online shopping realm. This app enables users to create order, inspect the details of products. 
 ## Features
