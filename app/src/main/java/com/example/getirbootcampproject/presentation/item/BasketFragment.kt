@@ -41,7 +41,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
             rvItemListHorizontal.adapter = itemSuggestedAdapter
         }
     }
-    private val basketItemAdapter = SingleRecylerAdapter<ItemPaymentBinding, CardItem>(  //for suggested items linear layout and item.ImageURL instead of item.thumbnailURL
+    private val basketItemAdapter = SingleRecylerAdapter<ItemPaymentBinding, CardItem>(
         { inflater, _, _ ->
             ItemPaymentBinding.inflate(
                 inflater,
@@ -96,7 +96,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         }
     )
 
-    private val itemSuggestedAdapter = SingleRecylerAdapter<ItemCardBinding, Product>(  //for suggested items linear layout and item.ImageURL instead of item.thumbnailURL
+    private val itemSuggestedAdapter = SingleRecylerAdapter<ItemCardBinding, Product>(
         { inflater, _, _ ->
             ItemCardBinding.inflate(
                 inflater,
