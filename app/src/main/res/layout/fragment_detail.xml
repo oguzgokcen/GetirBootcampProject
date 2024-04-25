@@ -34,8 +34,10 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_basket"
             android:layout_width="91dp"
             android:layout_height="34dp"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="8dp"
             app:cardElevation="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +78,7 @@
                     android:background="@color/bg_primary_subtle">
 
                     <TextView
-                        android:id="@+id/tv_navPrice"
+                        android:id="@+id/tv_cardTotal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/open_sans_bold"
@@ -97,9 +99,9 @@
         android:id="@+id/ll_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_theme_light_onPrimary"
         android:layout_below="@id/navLayout"
-        android:elevation="3dp"
+        android:background="@color/md_theme_light_onPrimary"
+        android:elevation="6dp"
         android:orientation="vertical">
 
         <ImageView
@@ -129,9 +131,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/open_sans_semibold"
-            android:textAlignment="center"
             android:maxLines="2"
             android:text="Product Name"
+            android:textAlignment="center"
             android:textColor="@color/text_dark"
             android:textFontWeight="600"
             android:textSize="20sp" />
@@ -153,34 +155,90 @@
         android:id="@+id/ll_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/ll_bottomLayout"
         android:layout_below="@id/ll_detail"
-        android:layout_above="@id/button"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:background="@color/md_theme_light_onPrimary"
         android:elevation="3dp"
         android:orientation="vertical">
 
     </LinearLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
+    <LinearLayout
+        android:id="@+id/ll_bottomLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="0dp"
-        android:height="65dp"
-        app:cornerRadius="10dp"
-        android:text="Sepete Ekle"
-        app:backgroundTint="@color/bg_primary"
-        android:textColor="@color/text_light"
-        android:fontFamily="@font/open_sans_bold"
-        android:textFontWeight="700"
-        android:textSize="14sp"
-        android:textAlignment="center"/>
+
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_addToCart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cornerRadius="10dp"
+            android:text="@string/detail_addToCard"
+            app:backgroundTint="@color/bg_primary"
+            android:textColor="@color/text_light"
+            android:fontFamily="@font/open_sans_bold"
+            android:textFontWeight="700"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:visibility="visible"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvItemFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="@color/white"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="6dp"
+            app:strokeWidth="1px"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivRemoveFromCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_item_delete"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvItemCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/primary_color"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="@color/bg_primary_subtle"
+                    android:textFontWeight="700"
+                    android:textSize="20sp"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/ivAddToCart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_item_add"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
 
 </RelativeLayout>

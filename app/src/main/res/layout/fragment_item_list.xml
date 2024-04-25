@@ -33,6 +33,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_basket"
             android:layout_width="91dp"
             android:layout_height="34dp"
             app:cardCornerRadius="8dp"
@@ -75,13 +76,13 @@
                     android:background="@color/bg_primary_subtle">
 
                     <TextView
-                        android:id="@+id/tv_price"
+                        android:id="@+id/tv_cardTotal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="₺0,00"
                         android:textColor="@color/primary_text_color"
-                        android:textSize="14sp"
                         android:textFontWeight="700"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

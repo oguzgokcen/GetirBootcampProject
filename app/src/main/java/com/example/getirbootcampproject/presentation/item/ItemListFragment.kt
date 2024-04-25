@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,18 +32,20 @@ import kotlinx.coroutines.launch
 class ItemListFragment : Fragment(R.layout.fragment_item_list) {
 
     private val binding by viewBinding(FragmentItemListBinding::bind)
-    private val viewModel: ItemViewModel by viewModels()
+    private val viewModel: ItemViewModel by activityViewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.v("ItemListFragment", "onViewCreated")
 
         viewModel.getSuggestedProducts()
         viewModel.getProducts()
+        initListener()
         initObserver()
     }
-
     private fun initListener() =with(binding){
-
+        cvBasket.setOnClickListener {
+            findNavController().navigate(R.id.action_itemListFragment_to_basketFragment)
+        }
     }
 
     private fun initObserver() = with(viewModel){
@@ -76,10 +79,10 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                     when (viewState) {
                         is ViewState.Success -> {
                             val response = viewState.result as BaseResponse.Success
-                            //binding.loadingView.visibility = View.GONE
                             itemSuggestedAdapter.data = response.data.products
                             binding.rvItemListHorizontal.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                             binding.rvItemListHorizontal.adapter = itemSuggestedAdapter
+                            setSuggestedProducts(response.data.products)
                             Log.v("ViewState.Success", response.data.toString())
                         }
 
@@ -93,6 +96,12 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                         }
                     }
                 }
+        }
+        getCardTotal().observe(viewLifecycleOwner){
+            binding.tvCardTotal.text = buildString {
+                append("₺")
+                append(String.format("%.2f", it))
+            }
         }
     }
 
@@ -111,10 +120,22 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                         .load(item.thumbnailURL)  //başlık resmini kullanıyoruz
                         .into(ivProductImage)
                 }
+                val count = viewModel.getItemCount(item)
                 tvProductName.text = item.name
                 tvProductPrice.text = item.priceText
                 tvProductAttribute.text = item.attribute
                 lladdToCart.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+                if(count > 0){
+                    tvItemCount.text = count.toString()
+                    tvItemCount.visibility = View.VISIBLE
+                    ivRemoveFromCard.visibility = View.VISIBLE
+                    mcvProductImage.strokeColor = ResourcesCompat.getColor(resources,
+                        R.color.primary_color, null)
+                }
+                if (count > 1){
+                    ivRemoveFromCard.setImageDrawable(ResourcesCompat.getDrawable(resources,
+                        R.drawable.ic_item_decrease, null))
+                }
                 ivAddToCart.setOnClickListener{
                     Log.v("ItemListFragment", "Add to cart clicked")
                     if(tvItemCount.visibility == View.GONE){
@@ -122,10 +143,9 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                         tvItemCount.visibility = v
                         ivRemoveFromCard.visibility = v
                     }
-                    val currentValue = tvItemCount.text.toString().toInt()
-                    val newValue = currentValue + 1
-                    tvItemCount.text = newValue.toString()
-                    if (newValue > 1){
+                    val count = viewModel.addToCard(item)
+                    tvItemCount.text = count.toString()
+                    if (count > 1){
                         ivRemoveFromCard.setImageDrawable(ResourcesCompat.getDrawable(resources,
                             R.drawable.ic_item_decrease, null))
                     }
@@ -134,13 +154,15 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                 }
                 ivRemoveFromCard.setOnClickListener{
                     Log.v("ItemListFragment", "Remove from cart clicked")
-                    if(tvItemCount.text.toString().toInt() > 0)
-                        tvItemCount.text = (tvItemCount.text.toString().toInt()-1).toString()
-                    if (tvItemCount.text.toString().toInt() ==1){
-                        ivRemoveFromCard.setImageDrawable(ResourcesCompat.getDrawable(resources,
-                            R.drawable.ic_item_delete, null))
+                    val count = viewModel.decreaseFromCard(item)
+                    if(count > 0)
+                        tvItemCount.text = count.toString()
+                    if (count==1){
+                        ivRemoveFromCard.setImageDrawable(
+                            ResourcesCompat.getDrawable(resources,
+                                R.drawable.ic_item_delete, null))
                     }
-                    if (tvItemCount.text.toString().toInt() == 0){
+                    if (count == 0){
                         tvItemCount.visibility = View.GONE
                         ivRemoveFromCard.visibility = View.GONE
                         mcvProductImage.strokeColor = ResourcesCompat.getColor(resources,
@@ -169,10 +191,22 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                         .load(item.imageURL)
                         .into(ivProductImage)
                 }
+                val count = viewModel.getItemCount(item)
                 tvProductName.text = item.name
                 tvProductPrice.text = item.priceText
                 tvProductAttribute.text = item.attribute
                 lladdToCart.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+                if(count > 0){
+                    tvItemCount.text = count.toString()
+                    tvItemCount.visibility = View.VISIBLE
+                    ivRemoveFromCard.visibility = View.VISIBLE
+                    mcvProductImage.strokeColor = ResourcesCompat.getColor(resources,
+                        R.color.primary_color, null)
+                }
+                if (count > 1){
+                    ivRemoveFromCard.setImageDrawable(ResourcesCompat.getDrawable(resources,
+                        R.drawable.ic_item_decrease, null))
+                }
                 ivAddToCart.setOnClickListener{
                     Log.v("ItemListFragment", "Add to cart clicked")
                     if(tvItemCount.visibility == View.GONE){
@@ -180,10 +214,9 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                         tvItemCount.visibility = v
                         ivRemoveFromCard.visibility = v
                     }
-                    val currentValue = tvItemCount.text.toString().toInt()
-                    val newValue = currentValue + 1
-                    tvItemCount.text = newValue.toString()
-                    if (newValue > 1){
+                    val count = viewModel.addToCard(item)
+                    tvItemCount.text = count.toString()
+                    if (count > 1){
                         ivRemoveFromCard.setImageDrawable(ResourcesCompat.getDrawable(resources,
                             R.drawable.ic_item_decrease, null))
                     }
@@ -192,13 +225,15 @@ class ItemListFragment : Fragment(R.layout.fragment_item_list) {
                 }
                 ivRemoveFromCard.setOnClickListener{
                     Log.v("ItemListFragment", "Remove from cart clicked")
-                    if(tvItemCount.text.toString().toInt() > 0)
-                        tvItemCount.text = (tvItemCount.text.toString().toInt()-1).toString()
-                    if (tvItemCount.text.toString().toInt() ==1){
-                        ivRemoveFromCard.setImageDrawable(ResourcesCompat.getDrawable(resources,
-                            R.drawable.ic_item_delete, null))
+                    val count = viewModel.decreaseFromCard(item)
+                    if(count > 0)
+                        tvItemCount.text = count.toString()
+                    if (count==1){
+                        ivRemoveFromCard.setImageDrawable(
+                            ResourcesCompat.getDrawable(resources,
+                                R.drawable.ic_item_delete, null))
                     }
-                    if (tvItemCount.text.toString().toInt() == 0){
+                    if (count == 0){
                         tvItemCount.visibility = View.GONE
                         ivRemoveFromCard.visibility = View.GONE
                         mcvProductImage.strokeColor = ResourcesCompat.getColor(resources,

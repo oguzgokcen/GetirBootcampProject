@@ -1,9 +1,14 @@
 package com.example.getirbootcampproject.presentation.item
 
+import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.getirbootcampproject.domain.ViewState
 import com.example.getirbootcampproject.domain.model.BaseResponse
+import com.example.getirbootcampproject.domain.model.CardItem
 import com.example.getirbootcampproject.domain.model.Product
 import com.example.getirbootcampproject.domain.model.remote.RespData
 import com.example.getirbootcampproject.domain.usecase.ProductsUseCase
@@ -22,6 +27,8 @@ class ItemViewModel @Inject constructor(
     private val productsUseCase: ProductsUseCase,
     private val suggestedProductsUseCase: SuggestedProductsUseCase
 ):ViewModel() {
+    val cardItems = mutableListOf<CardItem>()
+    val suggestedProducts = ArrayList<Product>()
     private val _uiStateItemList: MutableStateFlow<ViewState<BaseResponse<RespData<Product>>>> =
         MutableStateFlow(ViewState.Loading)
     val uiStateItemList = _uiStateItemList.asStateFlow()
@@ -30,13 +37,47 @@ class ItemViewModel @Inject constructor(
         MutableStateFlow(ViewState.Loading)
     val uiStateSuggestions = _uiStateSuggestions.asStateFlow()
 
-    var cardTotal = 0.0
+    private var cardTotal = MutableLiveData(0.00)
+    fun getCardTotal():LiveData<Double> = cardTotal
 
-    fun addToCard(price: Double) {
-        cardTotal += price
+    fun addToCard(item:Product):Int{
+        return if (item.id in cardItems.map { it.id }) {
+            val cardItem = cardItems.find { it.id == item.id }
+            cardItem?.increaseQuantity()
+            updateCardTotal()
+            cardItem?.quantity ?: 0
+        } else {
+            cardItems.add(CardItem(item.id, item.name, item.price, item.imageURL, attribute = item.attribute))
+            updateCardTotal()
+            1
+        }
     }
-    fun getCardTotal(): String {
-        return "₺"+String.format("%.2f", cardTotal)
+    fun decreaseFromCard(item:Product):Int{
+        return if (item.id in cardItems.map { it.id }) {
+            val cardItem = cardItems.find { it.id == item.id }
+            cardItem?.decreaseQuantity()
+            if (cardItem?.quantity == 0) {
+                cardItems.remove(cardItem)
+            }
+            updateCardTotal()
+            cardItem?.quantity ?: 0
+        } else {
+            return -1
+        }
+    }
+    fun getItemCount(item: Product): Int {
+        return cardItems.find { it.id == item.id }?.quantity ?: 0
+    }
+    fun getItemCountById(id: String): Int {
+        return cardItems.find { it.id == id }?.quantity ?: 0
+    }
+    fun updateCardTotal() {
+        cardTotal.value = cardItems.sumOf { it.totalPrice }
+    }
+
+    fun setSuggestedProducts(products: List<Product>) {
+        suggestedProducts.clear()
+        suggestedProducts.addAll(products)
     }
     fun getProducts() {
         productsUseCase.execute().map {

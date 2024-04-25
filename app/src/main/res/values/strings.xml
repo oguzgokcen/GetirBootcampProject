@@ -2,4 +2,8 @@
     <string name="app_name">Getir Bootcamp Project</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="suggested_products">Önerilen Ürünler</string>
+    <string name="basket_fragment_caption">Sepetim</string>
+    <string name="detail_addToCard">Sepete Ekle</string>
+    <string name="basket_checkout">Siparişi Tamamla</string>
 </resources>

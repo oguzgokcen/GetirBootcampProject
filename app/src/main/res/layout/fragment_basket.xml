@@ -1,14 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_primary_subtle"
     tools:context=".presentation.item.BasketFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/navLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/primary_color"
+        android:layout_alignParentStart="true">
 
-    <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:id="@+id/tv_nav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="@string/basket_fragment_caption"
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:textFontWeight="700"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBasketItems"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/navLayout"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:orientation="vertical" />
+
     <TextView
+        android:id="@+id/tv_suggestedProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rvBasketItems"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:textColor="@color/text_dark"
+        android:textFontWeight="600"
+        android:text="@string/suggested_products" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvItemListHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_suggestedProducts"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_addToCart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_gravity="center"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="0dp"
+        app:cornerRadius="10dp"
+        android:text="@string/basket_checkout"
+        app:backgroundTint="@color/bg_primary"
+        android:textColor="@color/text_light"
+        android:fontFamily="@font/open_sans_bold"
+        android:textFontWeight="700"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:visibility="visible"/>
+    </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

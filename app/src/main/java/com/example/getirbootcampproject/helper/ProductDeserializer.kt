@@ -29,7 +29,7 @@ class ProductDeserializer<T> : JsonDeserializer<RespData<T>> {
             else -> throw JsonParseException("ParameterizedType expected.")
         }
 
-        var productsList:List<T> = ArrayList();
+        var productsList:List<T> = ArrayList()
         if (productsElement != null) {
             for(i in 0 until productsElement.size()){
                 val productElement = productsElement.get(i)
@@ -37,7 +37,6 @@ class ProductDeserializer<T> : JsonDeserializer<RespData<T>> {
                 (productsList as ArrayList).add(product)
             }
         }
-        Log.v("ProductDeserializer", productsList.toString())
         return RespData(productsList)
     }
 
